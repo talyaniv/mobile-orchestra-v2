@@ -23,6 +23,20 @@ export default function StartPage() {
     }
   }
 
+  async function resetState() {
+    setMessage("");
+
+    const res = await fetch("/api/reset", {
+      method: "POST",
+    });
+
+    if (res.ok) {
+      setMessage("reset");
+    } else {
+      setMessage("reset error");
+    }
+  }
+
   return (
     <div className="mc-page">
       <form method="POST" onSubmit={submit}>
@@ -30,6 +44,7 @@ export default function StartPage() {
           pass: <input name="pass" value={pass} onChange={(e) => setPass(e.target.value)} />
         </div>
         <button type="submit">ok</button>
+        <button type="button" onClick={resetState}>reset</button>
       </form>
       {message && <div>{message}</div>}
     </div>

@@ -1,6 +1,6 @@
 # Mobile Orchestra — Next.js polling rewrite
 
-This is an updated version of [the original Mobile Orchestra](https://github.com/talyaniv/mobile-orchestra). While the original one splits the code between React client and Node/Express.js server, this one uses Next.JS to consolidate both into one code base. This makes it easier to deploy in Next.js ready platforms such as [Vercel](https://vercel.com).
+This is an updated version of [the original Mobile Orchestra](https://github.com/talyaniv/mobile-orchestra). While the original one splits the code between React client and Node/Express.js server, this one consolidates the client and server logic into one Next.JS code base. This makes it easier to deploy in Next.js ready platforms such as [Vercel](https://vercel.com).
 
 The app currently runs live in Vercel at [m.croptal.com](https://m.croptal.com)
 

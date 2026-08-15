@@ -13,12 +13,20 @@ export async function GET(req: NextRequest) {
   const [client, state] = await Promise.all([store.getClient(clientId), store.getState()]);
   if (!client) return NextResponse.json({ error: "Unknown clientId" }, { status: 404 });
 
+  // A persisted cue from an earlier performance must not start a participant
+  // who has only just clicked Start. Only expose cues issued after this client
+  // became ready.
+  const playAt =
+    client.ready && client.readyAt && state.playAt && state.playAt > client.readyAt
+      ? state.playAt
+      : null;
+
   return NextResponse.json({
     clientId: client.clientId,
     track: client.track,
     ready: client.ready,
     serverNow: Date.now(),
-    playAt: state.playAt,
-    message: state.playAt ? "play" : null,
+    playAt,
+    message: playAt ? "play" : null,
   });
 }

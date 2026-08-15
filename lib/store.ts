@@ -39,7 +39,13 @@ function createRedisStore(): Store {
 
       const state = await getState();
       const track = nextTrackFromIndex(state.nextTrackIndex);
-      const client: ClientRecord = { clientId, track, ready: false, joinedAt: Date.now() };
+      const client: ClientRecord = {
+        clientId,
+        track,
+        ready: false,
+        readyAt: null,
+        joinedAt: Date.now(),
+      };
 
       await redis.set(`${CLIENT_PREFIX}${clientId}`, client);
       await redis.sadd(CLIENT_IDS_KEY, clientId);
@@ -55,7 +61,7 @@ function createRedisStore(): Store {
       const client = await redis.get<ClientRecord>(`${CLIENT_PREFIX}${clientId}`);
       if (!client) return null;
 
-      const updated = { ...client, ready: true };
+      const updated = { ...client, ready: true, readyAt: Date.now() };
       await redis.set(`${CLIENT_PREFIX}${clientId}`, updated);
       return updated;
     },
@@ -105,7 +111,13 @@ function createMemoryStore(): Store {
       if (existing) return existing;
 
       const track = nextTrackFromIndex(memory.state.nextTrackIndex);
-      const client: ClientRecord = { clientId, track, ready: false, joinedAt: Date.now() };
+      const client: ClientRecord = {
+        clientId,
+        track,
+        ready: false,
+        readyAt: null,
+        joinedAt: Date.now(),
+      };
 
       memory.clients.set(clientId, client);
       memory.state.nextTrackIndex = (memory.state.nextTrackIndex + 1) % TRACK_COUNT;
@@ -116,7 +128,7 @@ function createMemoryStore(): Store {
       const client = memory.clients.get(clientId);
       if (!client) return null;
 
-      const updated = { ...client, ready: true };
+      const updated = { ...client, ready: true, readyAt: Date.now() };
       memory.clients.set(clientId, updated);
       return updated;
     },

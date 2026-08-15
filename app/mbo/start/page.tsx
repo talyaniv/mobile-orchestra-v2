@@ -28,6 +28,8 @@ export default function StartPage() {
 
     const res = await fetch("/api/reset", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pass }),
     });
 
     if (res.ok) {
